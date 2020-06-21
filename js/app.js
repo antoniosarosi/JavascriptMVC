@@ -1,3 +1,10 @@
+import Model from './model/model.js';
+import View from './view/view.js';
+
 document.addEventListener("DOMContentLoaded", (e) => {
-    console.log("Hello World");
+    const model = new Model();
+    const view = new View();
+
+    model.setView(view);
+    view.setModel(model);
 });

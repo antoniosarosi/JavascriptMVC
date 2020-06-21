@@ -2,14 +2,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- Bootstrap -->
-    <link
-      rel="stylesheet"
-      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk"
-      crossorigin="anonymous"
-    />
-    <!-- Darkly Theme -->
+    <!-- Darkly Theme Bootstrap -->
     <link
       href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.0/darkly/bootstrap.min.css"
       rel="stylesheet"
@@ -35,6 +28,77 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
+            <a
+              href="#"
+              class="nav-link"
+              data-toggle="modal"
+              data-target="#modal"
+              >Add Task</a
+            >
+          </li>
+          <!-- Modal -->
+          <div
+            class="modal fade"
+            id="modal"
+            tabindex="-1"
+            role="dialog"
+            aria-labelledby="exampleModalCenterTitle"
+            aria-hidden="true"
+          >
+            <div class="modal-dialog modal-dialog-centered" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title" id="exampleModalLongTitle">
+                    Task
+                  </h5>
+                  <button
+                    type="button"
+                    class="close"
+                    data-dismiss="modal"
+                    aria-label="Close"
+                  >
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">
+                  <form>
+                    <div class="form-group">
+                      <label for="exampleFormControlInput1">Title</label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="exampleFormControlInput1"
+                        placeholder="Do Something"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label for="exampleFormControlTextarea1">
+                        Description
+                      </label>
+                      <textarea
+                        class="form-control"
+                        id="exampleFormControlTextarea1"
+                        rows="3"
+                      ></textarea>
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button
+                    type="button"
+                    class="btn btn-secondary"
+                    data-dismiss="modal"
+                  >
+                    Close
+                  </button>
+                  <button type="button" class="btn btn-primary">
+                    Save changes
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <li class="nav-item active">
             <a href="#" class="nav-link">Filters</a>
           </li>
         </ul>
@@ -42,11 +106,13 @@
     </nav>
     <main>
       <div class="container p-3">
-        <div class="row">
-          <div class="col-md-4 mb-3">
+        <div class="row", id="task-list">
+          <!-- <div class="col-md-4 mb-3">
             <div class="card text-center">
               <div class="card-body">
-                <h3 class="card-title text-capitalize">Example Task</h3>
+                <h3 class="card-title text-capitalize">
+                  Example Task
+                </h3>
                 <p class="m-2">Example Description</p>
                 <div class="form-check">
                   <input
@@ -59,21 +125,11 @@
                     <p class="text-muted">Completed</p>
                   </label>
                 </div>
-                <button
-                  href="/contacts/edit/{{id}}"
-                  class="btn btn-primary mb-2"
-                >
-                  Edit
-                </button>
-                <button
-                  href="/contacts/delete/{{id}}"
-                  class="btn btn-danger mb-2"
-                >
-                  Delete
-                </button>
+                <button class="btn btn-primary mb-2">Edit</button>
+                <button class="btn btn-danger mb-2">Delete</button>
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </main>
@@ -94,6 +150,8 @@
       crossorigin="anonymous"
     ></script>
     <!-- JS -->
-    <script src="js/app.js"></script>
+    <script type="module" src="js/app.js"></script>
+    <script type="module" src="js/model/model.js"></script>
+    <script type="module" src="js/view/view.js"></script>
   </body>
 </html>
