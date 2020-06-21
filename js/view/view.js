@@ -12,6 +12,27 @@ export default class View {
     }
 
     /**
+     * Set model
+     * 
+     * @param {Model} model 
+     */
+    setModel(model) {
+        this.model = model;
+        this.taskListChanged();
+        return this;
+    }
+
+    /**
+     * Sets a new controller
+     * 
+     * @param {Controller} controller 
+     */
+    setController(controller) {
+        this.controller = controller;
+        return this;
+    }
+
+    /**
      * Entry point
      */
     view() {
@@ -35,35 +56,7 @@ export default class View {
         });
     }
 
-    /**
-     * Changes the model from where the view gets data
-     * 
-     * @param {Model} model 
-     */
-    setModel(model) {
-        this.model = model;
-        this.taskListChanged();
-        return this;
-    }
-
-    /**
-     * Sets a new controller
-     * 
-     * @param {Controller} controller 
-     */
-    setController(controller) {
-        this.controller = controller;
-        return this;
-    }
-
-    /**
-     * Returns the task data that the user has typed
-     * 
-     * @returns {Object} task
-     */
-    getTask() {
-        return this.currentTask;
-    }
+    // Model
 
     /**
      * Notifies the view about new data
@@ -74,6 +67,17 @@ export default class View {
         this.dataTaskList.forEach((task) => {
             this.domTaskList.appendChild(this.createTaskCard(task));
         });
+    }
+
+    // Controller
+
+    /**
+     * Returns the task data that the user has typed
+     * 
+     * @returns {Object} task
+     */
+    getTask() {
+        return this.currentTask;
     }
 
     /**
@@ -100,6 +104,8 @@ export default class View {
     log(msg) {
         console.log(msg);
     }
+
+    // Private
 
     /**
      * Creates a Bootstrap card to display info about a task
@@ -141,6 +147,9 @@ export default class View {
         completedCheckboxInput.classList.add('form-check-input', 'mt-1');
         completedCheckboxInput.setAttribute('type', 'checkbox');
         completedCheckboxInput.setAttribute('id', `checkbox${task.id}`);
+        if (task.completed) {
+            completedCheckboxInput.checked = true;
+        }
 
         completedCheckboxContainer.appendChild(completedCheckboxInput);
 
@@ -174,7 +183,7 @@ export default class View {
         deleteBtn.classList.add('btn', 'btn-danger', 'mb-2', 'ml-1');
         deleteBtn.innerText = 'Delete';
         deleteBtn.addEventListener('click', () => {
-            this.currentTask.id = task.id;
+            this.currentTask.id = `${task.id}`;
             this.controller.removeTask();
         }); 
 

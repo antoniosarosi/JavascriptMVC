@@ -2,7 +2,7 @@ const completedTasksFilter = (task) => task.completed;
 
 const notCompletedTasksFilter = (task) => !task.completed;
 
-const emptyFilter = (task) => {};
+const emptyFilter = () => {};
 
 export default {
     completedTasksFilter,
