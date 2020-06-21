@@ -1,14 +1,17 @@
 export default class Model {
     constructor() {
-        this.tasks = JSON.parse(localStorage.getItem('tasks')) || [];
+        this.tasks = JSON.parse(localStorage.getItem('tasks'));
+        this.taskId = JSON.parse(localStorage.getItem('lastId')) || 1;
         this.filters = [];
-        this.taskId = 1;
 
-        this.tasks.push({ 
-            id: this.taskId,
-            title: 'Example Task',
-            description: 'Example Description',
-        });
+        if (!this.tasks) {
+            this.tasks = [];
+            this.tasks.push({ 
+                id: `${this.taskId}`,
+                title: 'Example Task',
+                description: 'Example Description',
+            });
+        }
     }
 
     setView(view) {
@@ -17,34 +20,33 @@ export default class Model {
     }
 
     getTasks() {
-        this.filters = this.view.getFilters();
-        const filteredTasks = [...this.tasks];
-        this.filters.forEach((filter) => filteredTasks.filter(filter));
-
-        return filteredTasks;
+        return this.tasks;
     }
 
     addTask(task) {
-        task.id = ++this.taskId;
+        task.id = `${++this.taskId}`;
         this.tasks.push(task);
         this.storeTasks();
         this.view.taskListChanged();
     }
 
     updateTask(updatedTask) {
-        const index = this.tasks.find((task) => task.id === updatedTask.id);
-        this.tasks[index] = updatedTask;
+        const task = this.tasks.find((task) => task.id == updatedTask.id);
+        console.log(task);
+        Object.assign(task, updatedTask);
         this.storeTasks();
         this.view.taskListChanged();
     }
 
-    removeTask(taskToRemove) {
-        this.tasks.filter((task) => task.id === taskToRemove.id);
+    removeTask(id) {
+        console.log(id);
+        this.tasks = this.tasks.filter((task) => task.id != id);
         this.storeTasks();
         this.view.taskListChanged();
     }
 
     storeTasks() {
         localStorage.setItem('tasks', JSON.stringify(this.tasks));
+        localStorage.setItem('lastId', `${this.taskId}`);
     }
 }

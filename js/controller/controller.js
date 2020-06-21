@@ -1,7 +1,16 @@
 export default class Controller {
-    constructor(view, model) {
+    constructor() {
+
+    }
+
+    setView(view) {
         this.view = view;
+        return this;
+    }
+
+    setModel(model) {
         this.model = model;
+        return this;
     }
 
     emptyTitleError(task) {
@@ -13,22 +22,31 @@ export default class Controller {
     }
 
     addTask() {
-        task = view.getTask();
+        const task = this.view.getTask();
         if (!this.emptyTitleError(task)) {
-            this.model.addTask(task);
+            this.model.addTask({ 
+                id: task.id,
+                title: task.title,
+                description: task.description,
+             });
             this.view.log("Task added");
         }
     }
 
     updateTask() {
-        task = this.view.getTask();
+        const task = this.view.getTask();
+        console.log(task);
         if (!this.emptyTitleError(task)) {
-            this.model.updateTask(task);
+            this.model.updateTask({
+                id: task.id,
+                title: task.title,
+                description: task.description,
+            });
             this.view.log("Task updated"); 
         }
     }
 
-    removeTask(task) {
-        this.model.removeTask(this.view.getTask());
+    removeTask() {
+        this.model.removeTask(this.view.getTask().id);
     }
 }

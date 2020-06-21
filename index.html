@@ -29,84 +29,91 @@
         <ul class="navbar-nav mr-auto">
           <li class="nav-item active">
             <a
+              id="add"
               href="#"
               class="nav-link"
               data-toggle="modal"
               data-target="#modal"
-              >Add Task</a
             >
+              Add Task
+            </a>
           </li>
-          <!-- Modal -->
-          <div
-            class="modal fade"
-            id="modal"
-            tabindex="-1"
-            role="dialog"
-            aria-labelledby="exampleModalCenterTitle"
-            aria-hidden="true"
-          >
-            <div class="modal-dialog modal-dialog-centered" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLongTitle">
-                    Task
-                  </h5>
-                  <button
-                    type="button"
-                    class="close"
-                    data-dismiss="modal"
-                    aria-label="Close"
-                  >
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <div class="modal-body">
-                  <form>
-                    <div class="form-group">
-                      <label for="exampleFormControlInput1">Title</label>
-                      <input
-                        type="text"
-                        class="form-control"
-                        id="exampleFormControlInput1"
-                        placeholder="Do Something"
-                      />
-                    </div>
-                    <div class="form-group">
-                      <label for="exampleFormControlTextarea1">
-                        Description
-                      </label>
-                      <textarea
-                        class="form-control"
-                        id="exampleFormControlTextarea1"
-                        rows="3"
-                      ></textarea>
-                    </div>
-                  </form>
-                </div>
-                <div class="modal-footer">
-                  <button
-                    type="button"
-                    class="btn btn-secondary"
-                    data-dismiss="modal"
-                  >
-                    Close
-                  </button>
-                  <button type="button" class="btn btn-primary">
-                    Save changes
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
           <li class="nav-item active">
             <a href="#" class="nav-link">Filters</a>
           </li>
         </ul>
       </div>
     </nav>
+    <!-- Modal -->
+    <div
+      class="modal fade"
+      id="modal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="exampleModalCenterTitle"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">
+              Task
+            </h5>
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+            >
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <form>
+              <div class="form-group">
+                <label for="exampleFormControlInput1">Title</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="title"
+                  placeholder="Do Something"
+                />
+              </div>
+              <div class="form-group">
+                <label for="exampleFormControlTextarea1">
+                  Description
+                </label>
+                <textarea
+                  class="form-control"
+                  id="description"
+                  rows="3"
+                ></textarea>
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-dismiss="modal"
+            >
+              Close
+            </button>
+            <button
+              type="button"
+              class="btn btn-primary"
+              id="save"
+              action="add"
+            >
+              Save changes
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
     <main>
       <div class="container p-3">
-        <div class="row", id="task-list">
+        <div class="row" , id="task-list">
           <!-- <div class="col-md-4 mb-3">
             <div class="card text-center">
               <div class="card-body">
