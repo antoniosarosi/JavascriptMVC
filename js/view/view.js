@@ -1,194 +1,144 @@
 export default class View {
-    constructor() {
-        this.domTaskList = document.getElementById('task-list');
-        this.dataTaskList = [];
-        this.currentTask = {};
+  constructor() {
+    this.list = document.getElementById("task-list");
+    this.modalTitle = document.getElementById("modal-title");
+    this.modalDescription = document.getElementById("modal-description");
+    this.saveBtn = document.getElementById("save");
 
-        this.addBtn = document.getElementById('add');
-        this.saveBtn = document.getElementById('save');
+    this.task = {}
+    this.tasks = [];
+  }
 
-        this.titleInput = document.getElementById('title');
-        this.descriptionInput = document.getElementById('description');
+  setModel(model) {
+    this.model = model;
+    this.taskListChanged();
+    return this;
+  }
+
+  setController(controller) {
+    this.controller = controller;
+    return this;
+  }
+
+  editEvent(e) {
+    const id = Number(e.target.attributes.task.value);
+    const task = this.tasks.find((task) => task.id === id);
+
+    this.modalTitle.value = task.title;
+    this.modalDescription.value = task.description;
+    this.saveBtn.setAttribute("action", "edit");
+    this.saveBtn.setAttribute("task", id);
+  }
+
+  addTask() {
+    this.modalTitle.value = "";
+    this.modalDescription.value = "";
+    this.saveBtn.setAttribute("action", "add");
+  }
+
+  saveTask() {
+    const id = Number(this.saveBtn.attributes.task.value);
+    this.task = {
+      id,
+      title: this.modalTitle.value,
+      description: this.modalDescription.value,
+      completed: false,
+    };
+
+    if (this.saveBtn.attributes.action.value === "add") {
+      this.controller.addTask();
+    } else {
+      this.controller.updateTask();
     }
 
-    /**
-     * Set model
-     * 
-     * @param {Model} model 
-     */
-    setModel(model) {
-        this.model = model;
-        this.taskListChanged();
-        return this;
+    $('#modal').modal('toggle');
+  }
+
+  deleteTask(e) {
+    this.task.id = Number(e.target.attributes.task.value);
+    this.controller.removeTask();
+  }
+
+  addListeners() {
+    for (const btn of document.getElementsByClassName("edit")) {
+      btn.addEventListener("click", (e) => this.editEvent(e));
     }
 
-    /**
-     * Sets a new controller
-     * 
-     * @param {Controller} controller 
-     */
-    setController(controller) {
-        this.controller = controller;
-        return this;
+    for (const btn of document.getElementsByClassName("delete")) {
+      btn.addEventListener("click", (e) => this.deleteTask(e));
     }
+  }
 
-    /**
-     * Entry point
-     */
-    view() {
-        this.addBtn.addEventListener('click', () => {
-            this.saveBtn.setAttribute('action', 'add');
-            this.titleInput.value = '';
-            this.descriptionInput.value = '';
-        });
+  render() {
+    document.getElementById("add")
+      .addEventListener("click", (e) => this.addTask());
 
-        this.saveBtn.addEventListener('click', () => {
-            this.currentTask.title = this.titleInput.value;
-            this.currentTask.description = this.descriptionInput.value;
+    this.addListeners();
 
-            if (this.saveBtn.getAttribute('action') == 'add') {
-                this.controller.addTask();
-            } else {
-                this.controller.updateTask();
-            }
+    this.saveBtn.addEventListener("click", (e) => this.saveTask());
+  }
 
-            $('#modal').modal('toggle');
-        });
-    }
+  // Model
 
-    // Model
+  taskListChanged() {
+    this.tasks = this.model.getTasks();
+    this.list.innerHTML = '';
+    this.createCards().forEach((card) => this.list.appendChild(card));
+    this.addListeners();
+  }
 
-    /**
-     * Notifies the view about new data
-     */
-    taskListChanged() {
-        this.dataTaskList = this.model.getTasks();
-        this.domTaskList.innerHTML = '';
-        this.dataTaskList.forEach((task) => {
-            this.domTaskList.appendChild(this.createTaskCard(task));
-        });
-    }
+  // Controller
 
-    // Controller
+  getTask() {
+    return this.task;
+  }
 
-    /**
-     * Returns the task data that the user has typed
-     * 
-     * @returns {Object} task
-     */
-    getTask() {
-        return this.currentTask;
-    }
+  error(err) {
+    console.log(err);
+  }
 
-    /**
-     * Filters selected by the user
-     */
-    getFilters() {
-        return [];
-    }
+  log(msg) {
+    console.log(msg);
+  }
 
-    /**
-     * Displays an error on the view
-     * 
-     * @param {String} err 
-     */
-    error(err) {
-        console.log(err);
-    }
+  // Private
 
-    /**
-     * Displays a message for the user
-     * 
-     * @param {String} msg 
-     */
-    log(msg) {
-        console.log(msg);
-    }
+  createCards() {
+    return this.tasks.map((task) => {
+      const div = document.createElement("div");
+      div.classList.add("col-md-4", "mb-3");
+      div.innerHTML = `
+        <div class="card text-center">
+          <div class="card-body">
+            <h3 task="${task.id}" class="card-title">${task.title}</h3>
+            <p task="${task.id}" class="m-2">${task.description}</p>
+            <div class="form-check">
+              <input
+                class="form-check-input mt-1"
+                type="checkbox"
+                task="${task.id}"
+                ${task.completed ? "checked" : ""}
+              />
+              <label class="form-check-label ml-1" for="check${task.id}">
+                <p class="text-muted">Completed</p>
+              </label>
+            </div>
+            <button
+              task="${task.id}"
+              class="btn btn-primary mb-2 edit"
+              data-toggle="modal"
+              data-target="#modal"
+            >
+              Edit
+            </button>
+            <button class="btn btn-danger mb-2 delete" task="${task.id}">
+              Delete
+            </button>
+          </div>
+        </div>
+      `;
 
-    // Private
-
-    /**
-     * Creates a Bootstrap card to display info about a task
-     * 
-     * @param {Object} task
-     */
-    createTaskCard(task) {
-        const container = document.createElement('div');
-        container.classList.add('col-md-4', 'mb-3');
-
-        const card = document.createElement('div');
-        card.classList.add('card', 'text-center');
-
-        container.appendChild(card);
-
-        const cardBody = document.createElement('div');
-        cardBody.classList.add('card-body');
-
-        card.appendChild(cardBody);
-
-        const cardTitle = document.createElement('h3');
-        cardTitle.classList.add('card-title', 'text-capitalize');
-        cardTitle.innerText = task.title;
-
-        cardBody.appendChild(cardTitle);
-
-        const cardDescription = document.createElement('p');
-        cardDescription.classList.add('m-2');
-        cardDescription.innerText = task.description;
-
-        cardBody.appendChild(cardDescription);
-
-        const completedCheckboxContainer = document.createElement('div');
-        completedCheckboxContainer.classList.add('form-check');
-
-        cardBody.appendChild(completedCheckboxContainer);
-
-        const completedCheckboxInput = document.createElement('input');
-        completedCheckboxInput.classList.add('form-check-input', 'mt-1');
-        completedCheckboxInput.setAttribute('type', 'checkbox');
-        completedCheckboxInput.setAttribute('id', `checkbox${task.id}`);
-        if (task.completed) {
-            completedCheckboxInput.checked = true;
-        }
-
-        completedCheckboxContainer.appendChild(completedCheckboxInput);
-
-        const checkBoxLabel = document.createElement('label');
-        checkBoxLabel.classList.add('form-check-label', 'ml-1');
-        checkBoxLabel.setAttribute('for', `checkbox${task.id}`);
-
-        const labelText = document.createElement('p');
-        labelText.classList.add('text-muted');
-        labelText.innerText = 'Completed';
-
-        checkBoxLabel.appendChild(labelText);
-        completedCheckboxContainer.appendChild(checkBoxLabel);
-
-        const editBtn = document.createElement('button');
-        editBtn.classList.add('btn', 'btn-primary', 'mb-2', 'mr-1');
-        editBtn.innerText = 'Edit';
-        editBtn.setAttribute('data-toggle', 'modal');
-        editBtn.setAttribute('data-target', '#modal');
-        editBtn.addEventListener('click', () => {
-            this.currentTask.id = `${task.id}`;
-            this.titleInput.value = task.title;
-            this.descriptionInput.value = task.description;
-    
-            this.saveBtn.setAttribute('action', 'edit');
-        });
-
-        cardBody.appendChild(editBtn);
-
-        const deleteBtn = document.createElement('button');
-        deleteBtn.classList.add('btn', 'btn-danger', 'mb-2', 'ml-1');
-        deleteBtn.innerText = 'Delete';
-        deleteBtn.addEventListener('click', () => {
-            this.currentTask.id = `${task.id}`;
-            this.controller.removeTask();
-        }); 
-
-        cardBody.appendChild(deleteBtn);
-
-        return container;
-    }
+      return div;
+    });
+  }
 }

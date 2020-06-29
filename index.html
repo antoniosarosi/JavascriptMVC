@@ -30,6 +30,7 @@
           <li class="nav-item active">
             <a
               id="add"
+              event="add"
               href="#"
               class="nav-link"
               data-toggle="modal"
@@ -73,9 +74,9 @@
               <div class="form-group">
                 <label for="exampleFormControlInput1">Title</label>
                 <input
+                  id="modal-title"
                   type="text"
                   class="form-control"
-                  id="title"
                   placeholder="Do Something"
                 />
               </div>
@@ -85,7 +86,7 @@
                 </label>
                 <textarea
                   class="form-control"
-                  id="description"
+                  id="modal-description"
                   rows="3"
                 ></textarea>
               </div>
@@ -103,7 +104,7 @@
               type="button"
               class="btn btn-primary"
               id="save"
-              action="add"
+              task=""
             >
               Save changes
             </button>

@@ -11,5 +11,5 @@ document.addEventListener("DOMContentLoaded", (e) => {
     view.setModel(model).setController(controller);
     controller.setModel(model).setView(view);
     
-    view.view();
+    view.render();
 });
